@@ -9,7 +9,7 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, likePost, dislikePost, toggleExpandedPost, addPost } from './actions';
+import { loadPosts, loadMorePosts, likePost, dislikePost, removePost, toggleExpandedPost, addPost } from './actions';
 
 import styles from './styles.module.scss';
 
@@ -27,7 +27,7 @@ class Thread extends React.Component {
         };
     }
 
-    tooglePosts = () => {
+    togglePosts = () => {
         this.setState(
             ({ showOwnPosts }) => ({ showOwnPosts: !showOwnPosts }),
             () => {
@@ -59,6 +59,8 @@ class Thread extends React.Component {
 
     render() {
         const { posts = [], expandedPost, hasMorePosts, ...props } = this.props;
+        console.log('this.props: ', this.props);
+        console.log('posts: ', posts);
         const { showOwnPosts, sharedPostId } = this.state;
         return (
             <div className={styles.threadContent}>
@@ -66,7 +68,7 @@ class Thread extends React.Component {
                     <AddPost addPost={props.addPost} uploadImage={this.uploadImage} />
                 </div>
                 <div className={styles.toolbar}>
-                    <Checkbox toggle label="Show only my posts" checked={showOwnPosts} onChange={this.tooglePosts} />
+                    <Checkbox toggle label="Show only my posts" checked={showOwnPosts} onChange={this.togglePosts} />
                 </div>
                 <InfiniteScroll
                     pageStart={0}
@@ -79,8 +81,10 @@ class Thread extends React.Component {
                             post={post}
                             likePost={props.likePost}
                             dislikePost={props.dislikePost}
+                            removePost={props.removePost}
                             toggleExpandedPost={props.toggleExpandedPost}
                             sharePost={this.sharePost}
+                            currentUserId={props.userId}
                             key={post.id}
                         />
                     ))}
@@ -108,7 +112,8 @@ Thread.propTypes = {
     loadMorePosts: PropTypes.func.isRequired,
     likePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
-    addPost: PropTypes.func.isRequired
+    addPost: PropTypes.func.isRequired,
+    removePost: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -131,6 +136,7 @@ const actions = {
     loadMorePosts,
     likePost,
     dislikePost,
+    removePost,
     toggleExpandedPost,
     addPost
 };

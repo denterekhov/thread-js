@@ -2,6 +2,7 @@ import * as postService from 'src/services/postService';
 import * as commentService from 'src/services/commentService';
 import {
     ADD_POST,
+    REMOVE_POST,
     LOAD_MORE_POSTS,
     SET_ALL_POSTS,
     SET_EXPANDED_POST
@@ -25,6 +26,11 @@ const addPostAction = post => ({
 const setExpandedPostAction = post => ({
     type: SET_EXPANDED_POST,
     post
+});
+
+export const removePost = postId => ({
+    type: REMOVE_POST,
+    postId
 });
 
 export const loadPosts = filter => async (dispatch) => {

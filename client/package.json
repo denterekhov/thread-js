@@ -32,6 +32,7 @@
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "^2.1.8",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.1",
@@ -42,7 +43,6 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4",
-    "redux-devtools-extension": "^2.13.8"
+    "eslint-plugin-react": "^7.12.4"
   }
 }
