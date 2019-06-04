@@ -12,7 +12,8 @@ const Post = ({
     removePost,
     toggleExpandedPost,
     sharePost,
-    currentUserId
+    currentUserId,
+    closeModal
 }) => {
     const {
         id,
@@ -27,8 +28,13 @@ const Post = ({
     } = post;
     const date = moment(createdAt).fromNow();
 
+    const deletePost = () => {
+        removePost(id);
+        if (closeModal) closeModal();
+    };
+
     const createDeleteButton = () => (currentUserId === userId
-        ? (<button type="submit" className="ui red right floated button" onClick={() => removePost(id)}>Delete post</button>)
+        ? (<button type="submit" className="ui red right floated button" onClick={deletePost}>Delete post</button>)
         : null);
 
     const deleteButton = createDeleteButton();
@@ -80,7 +86,13 @@ Post.propTypes = {
     removePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
     sharePost: PropTypes.func.isRequired,
-    currentUserId: PropTypes.string.isRequired
+    currentUserId: PropTypes.string.isRequired,
+    closeModal: PropTypes.func
+};
+
+
+Post.defaultProps = {
+    closeModal: undefined
 };
 
 export default Post;

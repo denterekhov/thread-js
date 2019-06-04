@@ -59,8 +59,6 @@ class Thread extends React.Component {
 
     render() {
         const { posts = [], expandedPost, hasMorePosts, ...props } = this.props;
-        console.log('this.props: ', this.props);
-        console.log('posts: ', posts);
         const { showOwnPosts, sharedPostId } = this.state;
         return (
             <div className={styles.threadContent}>
@@ -111,6 +109,7 @@ Thread.propTypes = {
     loadPosts: PropTypes.func.isRequired,
     loadMorePosts: PropTypes.func.isRequired,
     likePost: PropTypes.func.isRequired,
+    dislikePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
     addPost: PropTypes.func.isRequired,
     removePost: PropTypes.func.isRequired
