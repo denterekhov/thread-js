@@ -3,6 +3,7 @@ import {
     LOAD_MORE_POSTS,
     ADD_POST,
     REMOVE_POST,
+    REMOVE_COMMENT,
     SET_EXPANDED_POST
 } from './actionTypes';
 
@@ -29,6 +30,16 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 posts: state.posts.filter(post => post.id !== action.postId)
+            };
+        case REMOVE_COMMENT:
+            return {
+                ...state,
+                expandedPost: {
+                    ...state.expandedPost,
+                    comments: state.expandedPost.comments.filter(
+                        comment => comment.id !== action.commentId
+                    )
+                }
             };
         case SET_EXPANDED_POST:
             return {
