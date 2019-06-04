@@ -80,7 +80,8 @@ export const likePost = postId => async (dispatch, getRootState) => {
 
 export const dislikePost = postId => async (dispatch, getRootState) => {
     const { id } = await postService.dislikePost(postId);
-    const diff = id ? 1 : -1; // if ID exists then the post was liked, otherwise - like was removed
+    const diff = id ? 1 : -1;
+    // if ID exists then the post was disliked, otherwise - dislike was removed
 
     const mapLikes = post => ({
         ...post,
