@@ -5,7 +5,15 @@ import moment from 'moment';
 
 import styles from './styles.module.scss';
 
-const Post = ({ post, likePost, dislikePost, toggleExpandedPost, sharePost }) => {
+const Post = ({
+    post,
+    likePost,
+    dislikePost,
+    removePost,
+    toggleExpandedPost,
+    sharePost,
+    currentUserId
+}) => {
     const {
         id,
         image,
@@ -14,9 +22,17 @@ const Post = ({ post, likePost, dislikePost, toggleExpandedPost, sharePost }) =>
         likeCount,
         dislikeCount,
         commentCount,
-        createdAt
+        createdAt,
+        userId
     } = post;
     const date = moment(createdAt).fromNow();
+
+    const createDeleteButton = () => (currentUserId === userId
+        ? (<button type="submit" className="ui red right floated button" onClick={() => removePost(id)}>Delete post</button>)
+        : null);
+
+    const deleteButton = createDeleteButton();
+
     return (
         <Card style={{ width: '100%' }}>
             {image && <Image src={image.link} wrapped ui={false} />}
@@ -50,6 +66,7 @@ const Post = ({ post, likePost, dislikePost, toggleExpandedPost, sharePost }) =>
                 <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => sharePost(id)}>
                     <Icon name="share alternate" />
                 </Label>
+                {deleteButton}
             </Card.Content>
         </Card>
     );
@@ -60,8 +77,10 @@ Post.propTypes = {
     post: PropTypes.objectOf(PropTypes.any).isRequired,
     likePost: PropTypes.func.isRequired,
     dislikePost: PropTypes.func.isRequired,
+    removePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
-    sharePost: PropTypes.func.isRequired
+    sharePost: PropTypes.func.isRequired,
+    currentUserId: PropTypes.string.isRequired
 };
 
 export default Post;
