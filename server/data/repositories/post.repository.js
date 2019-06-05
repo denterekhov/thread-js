@@ -1,20 +1,24 @@
+import Sequelize from 'sequelize';
 import sequelize from '../db/connection';
 import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel } from '../models/index';
 import BaseRepository from './base.repository';
+
+const Op = Sequelize.Op;
 
 const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
 
 class PostRepository extends BaseRepository {
     async getPosts(filter) {
+      console.log('filter: ', filter);
         const {
             from: offset,
             count: limit,
-            userId
+            userId: queryUserId
         } = filter;
 
         const where = {};
-        if (userId) {
-            Object.assign(where, { userId });
+        if (queryUserId) {
+            Object.assign(where, { userId: { [Op.ne]: queryUserId } });
         }
 
         return this.model.findAll({

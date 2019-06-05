@@ -18,7 +18,7 @@ class Thread extends React.Component {
         super(props);
         this.state = {
             sharedPostId: undefined,
-            showOwnPosts: false
+            showOtherPeoplesPosts: false
         };
         this.postsFilter = {
             userId: undefined,
@@ -29,13 +29,15 @@ class Thread extends React.Component {
 
     togglePosts = () => {
         this.setState(
-            ({ showOwnPosts }) => ({ showOwnPosts: !showOwnPosts }),
+            ({ showOtherPeoplesPosts }) => ({ showOtherPeoplesPosts: !showOtherPeoplesPosts }),
             () => {
                 Object.assign(this.postsFilter, {
-                    userId: this.state.showOwnPosts ? this.props.userId : undefined,
+                    userId: this.state.showOtherPeoplesPosts ? this.props.userId : undefined,
                     from: 0
                 });
                 this.props.loadPosts(this.postsFilter);
+                const { from, count } = this.postsFilter;
+                this.postsFilter.from = from + count;
             }
         );
     };
@@ -59,14 +61,14 @@ class Thread extends React.Component {
 
     render() {
         const { posts = [], expandedPost, hasMorePosts, ...props } = this.props;
-        const { showOwnPosts, sharedPostId } = this.state;
+        const { showOtherPeoplesPosts, sharedPostId } = this.state;
         return (
             <div className={styles.threadContent}>
                 <div className={styles.addPostForm}>
                     <AddPost addPost={props.addPost} uploadImage={this.uploadImage} />
                 </div>
                 <div className={styles.toolbar}>
-                    <Checkbox toggle label="Show only my posts" checked={showOwnPosts} onChange={this.togglePosts} />
+                    <Checkbox toggle label="Show only other people's posts" checked={showOtherPeoplesPosts} onChange={this.togglePosts} />
                 </div>
                 <InfiniteScroll
                     pageStart={0}
