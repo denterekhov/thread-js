@@ -6,7 +6,7 @@ import BaseRepository from './base.repository';
 
 const Op = Sequelize.Op;
 
-const likePostCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
+const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
 const likeCommentCase = bool => `SELECT "commentReactions"."isLike", CASE WHEN "isLike" = ${bool} THEN 1 ELSE 0 END FROM "commentReactions"`;
 
 class PostRepository extends BaseRepository {
@@ -31,8 +31,14 @@ class PostRepository extends BaseRepository {
                         (SELECT COUNT(*)
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
-            //         [sequelize.fn('SUM', sequelize.literal(likePostCase(true))), 'likeCount'],
-            //         [sequelize.fn('SUM', sequelize.literal(likePostCase(false))), 'dislikeCount']
+                    // [sequelize.literal(`
+                    //     (select users.username from "users" inner join (SELECT * FROM "postReactions" WHERE "postReactions"."isLike" = false) AS react on users.id = react."userId")`), 'peopleWhoLiked Post'],
+                    // [sequelize.literal(`
+                    //     (SELECT "user"."id"
+                    //     FROM "postReactions" as "reaction"
+                    //     WHERE "post"."id" = "reaction"."postId")`), 'peopleWhoLiked Post'],
+                    [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likePostCount'],
+                    [sequelize.fn('SUM', sequelize.literal(likeCase(false))), 'dislikePostCount']
                 ]
             },
             include: [{
@@ -48,7 +54,7 @@ class PostRepository extends BaseRepository {
             }, {
                 model: PostReactionModel,
                 attributes: ['isLike'],
-                // duplicating: false,
+                duplicating: false,
                 include: {
                     model: UserModel,
                     attributes: ['id', 'username']
@@ -56,11 +62,11 @@ class PostRepository extends BaseRepository {
             }],
             group: [
                 'post.id',
-                // 'image.id',
-                // 'user.id',
-                // 'user->image.id',
-                // 'postReactions.id',
-                // 'postReactions->user.id'
+                'image.id',
+                'user.id',
+                'user->image.id',
+                'postReactions.id',
+                'postReactions->user.id',
             ],
             order: [['createdAt', 'DESC']],
             offset,
@@ -91,8 +97,8 @@ class PostRepository extends BaseRepository {
                         (SELECT COUNT(*)
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
-                    [sequelize.fn('SUM', sequelize.literal(likePostCase(true))), 'likePostCount'],
-                    [sequelize.fn('SUM', sequelize.literal(likePostCase(false))), 'dislikePostCount'],
+                    [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likePostCount'],
+                    [sequelize.fn('SUM', sequelize.literal(likeCase(false))), 'dislikePostCount'],
                     // [sequelize.fn('SUM', sequelize.literal(`CASE WHEN public.commentReactions."isLike" = true THEN 1 ELSE 0 END`)), 'likeCommentCount'],
                     // [sequelize.fn('SUM', sequelize.literal(likeCommentCase(false))), 'dislikeCommentCount']
                 ]
@@ -127,7 +133,7 @@ class PostRepository extends BaseRepository {
             }, {
                 model: PostReactionModel,
                 attributes: ['isLike'],
-                // duplicating: false,
+                duplicating: false,
                 include: {
                     model: UserModel,
                     attributes: ['id', 'username']

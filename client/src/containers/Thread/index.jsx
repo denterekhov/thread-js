@@ -9,7 +9,7 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, likePost, dislikePost, removePost, toggleExpandedPost, addPost } from './actions';
+import { loadPosts, loadMorePosts, removePost, togglePostLike, toggleExpandedPost, addPost, updatePost } from './actions';
 
 import styles from './styles.module.scss';
 
@@ -79,10 +79,9 @@ class Thread extends React.Component {
                     {posts.map(post => (
                         <Post
                             post={post}
-                            likePost={props.likePost}
-                            dislikePost={props.dislikePost}
                             removePost={props.removePost}
                             toggleExpandedPost={props.toggleExpandedPost}
+                            togglePostLike={props.togglePostLike}
                             sharePost={this.sharePost}
                             currentUserId={props.userId}
                             key={post.id}
@@ -110,11 +109,11 @@ Thread.propTypes = {
     userId: PropTypes.string,
     loadPosts: PropTypes.func.isRequired,
     loadMorePosts: PropTypes.func.isRequired,
-    likePost: PropTypes.func.isRequired,
-    dislikePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
+    togglePostLike: PropTypes.func.isRequired,
     addPost: PropTypes.func.isRequired,
-    removePost: PropTypes.func.isRequired
+    removePost: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -135,11 +134,11 @@ const mapStateToProps = rootState => ({
 const actions = {
     loadPosts,
     loadMorePosts,
-    likePost,
-    dislikePost,
+    togglePostLike,
     removePost,
     toggleExpandedPost,
-    addPost
+    addPost,
+    updatePost
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

@@ -4,6 +4,7 @@ export default (models) => {
         Post,
         PostReaction,
         Comment,
+        CommentReaction,
         Image
     } = models;
 
@@ -13,6 +14,7 @@ export default (models) => {
 
     User.hasMany(Post);
     User.hasMany(Comment);
+    User.hasMany(CommentReaction);
     User.hasMany(PostReaction);
     User.belongsTo(Image);
 
@@ -20,10 +22,16 @@ export default (models) => {
     Post.belongsTo(User);
     Post.hasMany(PostReaction);
     Post.hasMany(Comment);
+    Post.hasMany(CommentReaction);
 
+    Comment.hasMany(CommentReaction);
     Comment.belongsTo(User);
     Comment.belongsTo(Post);
 
     PostReaction.belongsTo(Post);
     PostReaction.belongsTo(User);
+
+    CommentReaction.belongsTo(Comment);
+    CommentReaction.belongsTo(User);
+    CommentReaction.belongsTo(Post);
 };

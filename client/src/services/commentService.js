@@ -16,3 +16,15 @@ export const getComment = async (id) => {
     });
     return response.json();
 };
+
+export const toggleCommentLike = async (commentId, isLike) => {
+    const response = await callWebApi({
+        endpoint: '/api/comments/react',
+        type: 'PUT',
+        request: {
+            commentId,
+            isLike
+        }
+    });
+    return response.json();
+};

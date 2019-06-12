@@ -5,59 +5,31 @@ import moment from 'moment';
 
 import styles from './styles.module.scss';
 
-const R = require('ramda');
-
 const Post = ({
     post,
-    togglePostLike,
+    likePost,
+    dislikePost,
     removePost,
     toggleExpandedPost,
     sharePost,
     currentUserId,
     closeModal
 }) => {
+    const [likers, setLikers] = useState(false);
     const {
         id,
         image,
         body,
         user,
+        likePostCount,
+        dislikePostCount,
         commentCount,
         createdAt,
         postReactions,
         userId
     } = post;
-
     const date = moment(createdAt).fromNow();
 
-    const [likers, setLikers] = useState(false);
-    const [dislikers, setDislikers] = useState(false);
-
-    // Count likes and dislikes
-    const countLikesAndDislikes = (array) => {
-        const likesArray = R.pluck('isLike', array);
-        return R.countBy(Boolean)(likesArray);
-    };
-
-    const { true: likePostCount = 0, false: dislikePostCount = 0 } = countLikesAndDislikes(postReactions);
-
-    // Show likers and dislikers
-    const createLikersList = (isLike) => {
-        const likersArray = postReactions.reduce((acc, next) => (next.isLike === isLike
-            ? [...acc, next.user]
-            : acc), []);
-        return likersArray.length
-            ? (
-                <ul>
-                    {likersArray.map(liker => <li key={liker.id}>{liker.username}</li>)}
-                </ul>
-            )
-            : null;
-    };
-
-    const likes = likers && createLikersList(true);
-    const dislikes = dislikers && createLikersList(false);
-
-    // Create remove button
     const deletePost = () => {
         removePost(id);
         if (closeModal) closeModal();
@@ -68,6 +40,42 @@ const Post = ({
         : null);
 
     const deleteButton = createDeleteButton();
+
+
+    console.log('postReactions: ', postReactions);
+
+    const createList = likes => (
+        <ul>
+            {likes.map(liker => <li key={liker.id}>{liker.username}</li>)}
+        </ul>
+    );
+
+
+    const createLikersList = () => {
+        if (likers && postReactions && postReactions.length) {
+            const likesObject = postReactions.reduce((acc, next) => {
+                const newAcc = next.isLike ? [...acc.likers, next.user] : [...acc.dislikers, next.user];
+                return newAcc;
+            }, {
+                likers: [], dislikers: []
+            });
+            // console.log('likes: ', likes);
+            return {
+                likes: createList(likesObject.likers),
+                dislikes: createList(likesObject.dislikers)
+            };
+        }
+        return null;
+    };
+
+    //   const countLikesAndDislikes = (array) => {
+    //     const likesArray = R.pluck('isLike', array);
+    //     return R.countBy(Boolean)(likesArray);
+    // };
+
+    // const { true: likeCommentCount = 0, false: dislikeCommentCount = 0 } = countLikesAndDislikes(commentReactions);
+
+    const { likes = null, dislikes = null } = createLikersList();
 
     return (
         <Card style={{ width: '100%' }}>
@@ -87,11 +95,11 @@ const Post = ({
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => togglePostLike(id, true)} onMouseEnter={() => setLikers(true)} onMouseLeave={() => setLikers(false)}>
+                <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => likePost(id)} onMouseEnter={() => setLikers(true)} onMouseLeave={() => setLikers(false)}>
                     <Icon name="thumbs up">{likes}</Icon>
                     {likePostCount}
                 </Label>
-                <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => togglePostLike(id, false)} onMouseEnter={() => setDislikers(true)} onMouseLeave={() => setDislikers(false)}>
+                <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => dislikePost(id)}>
                     <Icon name="thumbs down">{dislikes}</Icon>
                     {dislikePostCount}
                 </Label>
@@ -111,7 +119,8 @@ const Post = ({
 
 Post.propTypes = {
     post: PropTypes.objectOf(PropTypes.any).isRequired,
-    togglePostLike: PropTypes.func.isRequired,
+    likePost: PropTypes.func.isRequired,
+    dislikePost: PropTypes.func.isRequired,
     removePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
     sharePost: PropTypes.func.isRequired,

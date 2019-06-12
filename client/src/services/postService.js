@@ -28,30 +28,53 @@ export const getPost = async (id) => {
 };
 
 
-export const likePost = async (postId) => {
+// export const likePost = async (postId) => {
+//     const response = await callWebApi({
+//         endpoint: '/api/posts/react',
+//         type: 'PUT',
+//         request: {
+//             postId,
+//             isLike: true
+//         }
+//     });
+//     return response.json();
+// };
+
+// export const dislikePost = async (postId) => {
+//     const response = await callWebApi({
+//         endpoint: '/api/posts/react',
+//         type: 'PUT',
+//         request: {
+//             postId,
+//             isLike: false
+//         }
+//     });
+//     return response.json();
+// };
+
+
+export const togglePostLike = async (postId, isLike) => {
     const response = await callWebApi({
-        endpoint: '/api/posts/react',
+        endpoint: `/api/posts/react/${postId}`,
         type: 'PUT',
         request: {
             postId,
-            isLike: true
+            isLike
         }
     });
     return response.json();
 };
 
-export const dislikePost = async (postId) => {
+export const updatePost = async (postId, request) => {
     const response = await callWebApi({
-        endpoint: '/api/posts/react',
+        endpoint: `/api/posts/${postId}`,
         type: 'PUT',
         request: {
-            postId,
-            isLike: false
+            request,
         }
     });
     return response.json();
 };
-
 
 // should be replaced by approppriate function
 export const getPostByHash = async hash => getPost(hash);
