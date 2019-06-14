@@ -3,6 +3,7 @@ import { usersSeed, userImagesSeed } from '../seed-data/users.seed';
 import { postsSeed, postImagesSeed } from '../seed-data/posts.seed';
 import commentsSeed from '../seed-data/comments.seed';
 import postReactionsSeed from '../seed-data/post-reactions.seed';
+import commentReactionsSeed from '../seed-data/comment-reactions.seed';
 
 const randomIndex = length => Math.floor(Math.random() * length);
 const mapLinks = images => images.map(x => `'${x.link}'`).join(',');
@@ -55,6 +56,16 @@ export default {
                 postId: posts[randomIndex(posts.length)].id
             }));
             await queryInterface.bulkInsert('postReactions', postReactionsMappedSeed, {});
+            const comments = await queryInterface.sequelize.query('SELECT id FROM "comments";', options);
+
+            // Add comment reactions.
+            const commentReactionsMappedSeed = commentReactionsSeed.map(reaction => ({
+                ...reaction,
+                userId: users[randomIndex(users.length)].id,
+                commentId: comments[randomIndex(comments.length)].id,
+                postId: posts[randomIndex(posts.length)].id
+            }));
+            await queryInterface.bulkInsert('commentReactions', commentReactionsMappedSeed, {});
         } catch (err) {
             console.log(`Seeding error: ${err}`);
         }
@@ -62,6 +73,7 @@ export default {
 
     down: async (queryInterface) => {
         try {
+            await queryInterface.bulkDelete('commentReactions', null, {});
             await queryInterface.bulkDelete('postReactions', null, {});
             await queryInterface.bulkDelete('comments', null, {});
             await queryInterface.bulkDelete('posts', null, {});

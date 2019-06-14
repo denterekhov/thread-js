@@ -19,6 +19,16 @@ class AddPost extends React.Component {
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if (state.body === '' && props.editingPost) {
+            return {
+                body: props.editingPost.body,
+                postId: props.editingPost.id,
+            };
+        }
+        return null;
+    }
+
     handleAddPost = async () => {
         const { imageId, body } = this.state;
         if (!body) {
@@ -26,6 +36,30 @@ class AddPost extends React.Component {
         }
         await this.props.addPost({ imageId, body });
         this.setState(initialState);
+    }
+
+    cancelUpdatePostOnKeyDown = async (e) => {
+        const { body, postId } = this.state;
+        const escKey = e.key === 'Escape';
+        if (escKey) {
+            await this.props.updatePost(postId, { body });
+            this.setState({
+                ...initialState,
+                postId: undefined
+            });
+        }
+    }
+
+    handleUpdatePost = async () => {
+        const { body, postId } = this.state;
+        if (!body) {
+            return;
+        }
+        await this.props.updatePost(postId, { body });
+        this.setState({
+            ...initialState,
+            postId: undefined
+        });
     }
 
     handleUploadFile = async ({ target }) => {
@@ -40,15 +74,16 @@ class AddPost extends React.Component {
     }
 
     render() {
-        const { imageLink, body, isUploading } = this.state;
+        const { imageLink, body, isUploading, postId } = this.state;
         return (
             <Segment>
-                <Form onSubmit={this.handleAddPost}>
+                <Form onSubmit={!postId ? this.handleAddPost : this.handleUpdatePost}>
                     <Form.TextArea
                         name="body"
                         value={body}
                         placeholder="What is the news?"
                         onChange={ev => this.setState({ body: ev.target.value })}
+                        onKeyDown={this.cancelUpdatePostOnKeyDown}
                     />
                     {imageLink && (
                         <div className={styles.imageWrapper}>
@@ -60,7 +95,7 @@ class AddPost extends React.Component {
                         Attach image
                         <input name="image" type="file" onChange={this.handleUploadFile} hidden />
                     </Button>
-                    <Button floated="right" color="blue" type="submit">Post</Button>
+                    <Button floated="right" color="blue" type="submit">{postId ? 'Update' : 'Post'}</Button>
                 </Form>
             </Segment>
         );
@@ -69,7 +104,13 @@ class AddPost extends React.Component {
 
 AddPost.propTypes = {
     addPost: PropTypes.func.isRequired,
-    uploadImage: PropTypes.func.isRequired
+    uploadImage: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired,
+    editingPost: PropTypes.objectOf(PropTypes.string),
+};
+
+AddPost.defaultProps = {
+    editingPost: undefined
 };
 
 export default AddPost;

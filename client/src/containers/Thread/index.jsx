@@ -9,7 +9,7 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, likePost, dislikePost, removePost, toggleExpandedPost, addPost } from './actions';
+import { loadPosts, loadMorePosts, removePost, editPost, togglePostLike, toggleExpandedPost, addPost, updatePost } from './actions';
 
 import styles from './styles.module.scss';
 
@@ -56,6 +56,13 @@ class Thread extends React.Component {
         this.setState({ sharedPostId: undefined });
     }
 
+    // editPost = (editingPostId, editingPostText) => {
+    //     this.setState({
+    //         editingPostId,
+    //         editingPostText
+    //     });
+    // };
+
     uploadImage = file => imageService.uploadImage(file);
 
 
@@ -65,7 +72,12 @@ class Thread extends React.Component {
         return (
             <div className={styles.threadContent}>
                 <div className={styles.addPostForm}>
-                    <AddPost addPost={props.addPost} uploadImage={this.uploadImage} />
+                    <AddPost
+                        addPost={props.addPost}
+                        uploadImage={this.uploadImage}
+                        editingPost={props.editingPost}
+                        updatePost={props.updatePost}
+                    />
                 </div>
                 <div className={styles.toolbar}>
                     <Checkbox toggle label="Show only other people's posts" checked={showOtherPeoplesPosts} onChange={this.togglePosts} />
@@ -79,11 +91,12 @@ class Thread extends React.Component {
                     {posts.map(post => (
                         <Post
                             post={post}
-                            likePost={props.likePost}
-                            dislikePost={props.dislikePost}
+                            expandedPost={expandedPost}
                             removePost={props.removePost}
                             toggleExpandedPost={props.toggleExpandedPost}
+                            togglePostLike={props.togglePostLike}
                             sharePost={this.sharePost}
+                            editPost={props.editPost}
                             currentUserId={props.userId}
                             key={post.id}
                         />
@@ -110,11 +123,11 @@ Thread.propTypes = {
     userId: PropTypes.string,
     loadPosts: PropTypes.func.isRequired,
     loadMorePosts: PropTypes.func.isRequired,
-    likePost: PropTypes.func.isRequired,
-    dislikePost: PropTypes.func.isRequired,
     toggleExpandedPost: PropTypes.func.isRequired,
+    togglePostLike: PropTypes.func.isRequired,
     addPost: PropTypes.func.isRequired,
-    removePost: PropTypes.func.isRequired
+    removePost: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -129,17 +142,19 @@ const mapStateToProps = rootState => ({
     posts: rootState.posts.posts,
     hasMorePosts: rootState.posts.hasMorePosts,
     expandedPost: rootState.posts.expandedPost,
+    editingPost: rootState.posts.editingPost,
     userId: rootState.profile.user.id
 });
 
 const actions = {
     loadPosts,
     loadMorePosts,
-    likePost,
-    dislikePost,
+    togglePostLike,
     removePost,
+    editPost,
     toggleExpandedPost,
-    addPost
+    addPost,
+    updatePost
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

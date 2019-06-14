@@ -3,10 +3,14 @@ import * as commentService from 'src/services/commentService';
 import {
     ADD_POST,
     REMOVE_POST,
+    EDIT_POST,
+    EDIT_COMMENT,
     REMOVE_COMMENT,
     LOAD_MORE_POSTS,
     SET_ALL_POSTS,
-    SET_EXPANDED_POST
+    SET_EXPANDED_POST,
+    SET_EDITING_POST,
+    SET_EDITING_COMMENT
 } from './actionTypes';
 
 const setPostsAction = posts => ({
@@ -29,14 +33,32 @@ const setExpandedPostAction = post => ({
     post
 });
 
+const setEditingPostAction = () => ({
+    type: SET_EDITING_POST,
+});
+
+const setEditingCommentAction = () => ({
+    type: SET_EDITING_COMMENT,
+});
+
 export const removePost = postId => ({
     type: REMOVE_POST,
     postId
 });
 
+export const editPost = post => ({
+    type: EDIT_POST,
+    post
+});
+
 export const removeComment = commentId => ({
     type: REMOVE_COMMENT,
     commentId
+});
+
+export const editComment = comment => ({
+    type: EDIT_COMMENT,
+    comment
 });
 
 export const loadPosts = filter => async (dispatch) => {
@@ -60,48 +82,100 @@ export const addPost = post => async (dispatch) => {
     dispatch(addPostAction(newPost));
 };
 
+export const updatePost = (postId, text) => async (dispatch, getRootState) => {
+    const { id } = await postService.updatePost(postId, text);
+    const updatedPost = await postService.getPost(id);
+    const { posts: { posts } } = getRootState();
+    dispatch(setEditingPostAction());
+    const newPosts = posts.map(post => (post.id !== updatedPost.id ? post : updatedPost));
+    dispatch(setPostsAction(newPosts));
+};
+
+export const updateComment = (commentId, text) => async (dispatch, getRootState) => {
+    const { id } = await commentService.updateComment(commentId, text);
+    const updatedComment = await commentService.getComment(id);
+    const { posts: { expandedPost } } = getRootState();
+    dispatch(setEditingCommentAction());
+    const updatedExpandedPost = {
+        ...expandedPost,
+        comments: expandedPost.comments.map(comment => (
+            comment.id !== updatedComment.id ? comment : updatedComment
+        ))
+    };
+    dispatch(setExpandedPostAction(updatedExpandedPost));
+};
+
 export const toggleExpandedPost = postId => async (dispatch) => {
     const post = postId ? await postService.getPost(postId) : undefined;
     dispatch(setExpandedPostAction(post));
 };
 
-export const likePost = postId => async (dispatch, getRootState) => {
-    const { id } = await postService.likePost(postId);
-    const diff = id ? 1 : -1; // if ID exists then the post was liked, otherwise - like was removed
+export const togglePostLike = (postId, isLike) => async (dispatch, getRootState) => {
+    const { id } = await postService.togglePostLike(postId, isLike);
 
-    const mapLikes = post => ({
-        ...post,
-        likeCount: Number(post.likeCount) + diff // diff is taken from the current closure
-    });
+    const {
+        posts: { posts, expandedPost },
+        profile: { user: { id: currentUserId, username } }
+    } = getRootState();
 
-    const { posts: { posts, expandedPost } } = getRootState();
-    const updated = posts.map(post => (post.id !== postId ? post : mapLikes(post)));
+    const mapPostReactions = (post) => {
+        const filteredPostReactions = post.postReactions.filter(
+            reaction => reaction.user.id !== currentUserId
+        );
+        return {
+            ...post,
+            postReactions: id
+                ? [...filteredPostReactions, {
+                    isLike,
+                    user: { id: currentUserId, username }
+                }]
+                : filteredPostReactions
+        };
+    };
 
-    dispatch(setPostsAction(updated));
+    const updatedPosts = () => posts.map(
+        post => (post.id !== postId ? post : mapPostReactions(post))
+    );
+
+    dispatch(setPostsAction(updatedPosts()));
 
     if (expandedPost && expandedPost.id === postId) {
-        dispatch(setExpandedPostAction(mapLikes(expandedPost)));
+        dispatch(setExpandedPostAction(mapPostReactions(expandedPost)));
     }
 };
 
-export const dislikePost = postId => async (dispatch, getRootState) => {
-    const { id } = await postService.dislikePost(postId);
-    const diff = id ? 1 : -1;
-    // if ID exists then the post was disliked, otherwise - dislike was removed
 
-    const mapLikes = post => ({
-        ...post,
-        dislikeCount: Number(post.dislikeCount) + diff // diff is taken from the current closure
+export const toggleCommentLike = (commentId, isLike) => async (dispatch, getRootState) => {
+    const { id } = await commentService.toggleCommentLike(commentId, isLike);
+
+    const {
+        posts: { expandedPost },
+        profile: { user: { id: currentUserId, username } }
+    } = getRootState();
+
+    const mapCommentReactions = (comment) => {
+        const filteredCommentReactions = comment.commentReactions.filter(
+            reaction => reaction.user.id !== currentUserId
+        );
+        return {
+            ...comment,
+            commentReactions: id
+                ? [...filteredCommentReactions, {
+                    isLike,
+                    user: { id: currentUserId, username }
+                }]
+                : filteredCommentReactions
+        };
+    };
+
+    const updatedExpandedPost = ({
+        ...expandedPost,
+        comments: expandedPost.comments.map(
+            comment => (comment.id !== commentId ? comment : mapCommentReactions(comment))
+        )
     });
 
-    const { posts: { posts, expandedPost } } = getRootState();
-    const updated = posts.map(post => (post.id !== postId ? post : mapLikes(post)));
-
-    dispatch(setPostsAction(updated));
-
-    if (expandedPost && expandedPost.id === postId) {
-        dispatch(setExpandedPostAction(mapLikes(expandedPost)));
-    }
+    dispatch(setExpandedPostAction(updatedExpandedPost));
 };
 
 export const addComment = request => async (dispatch, getRootState) => {

@@ -1,4 +1,4 @@
-import { CommentModel, UserModel, ImageModel } from '../models/index';
+import { CommentModel, UserModel, ImageModel, CommentReactionModel } from '../models/index';
 import BaseRepository from './base.repository';
 
 class CommentRepository extends BaseRepository {
@@ -7,7 +7,8 @@ class CommentRepository extends BaseRepository {
             group: [
                 'comment.id',
                 'user.id',
-                'user->image.id'
+                'user->image.id',
+                'commentReactions.id"'
             ],
             where: { id },
             include: [{
@@ -17,6 +18,8 @@ class CommentRepository extends BaseRepository {
                     model: ImageModel,
                     attributes: ['id', 'link']
                 }
+            }, {
+                model: CommentReactionModel,
             }]
         });
     }
