@@ -14,14 +14,23 @@ class PostRepository extends BaseRepository {
         const {
             from: offset,
             count: limit,
-            userId: queryUserId
+            userId: queryUserId,
+            likes
         } = filter;
 
         const where = {};
-        if (queryUserId) {
+        if (queryUserId && !likes) {
+            console.log('not likes: ', likes);
+
             Object.assign(where, { userId: { [Op.ne]: queryUserId } });
         }
-
+        if (queryUserId && likes) {
+            console.log('likes: ', likes);
+            Object.assign(where, {"$postReactions.userId$": `${queryUserId}`, "$postReactions.isLike$": true
+                // (select "posts"."userId" from posts inner join "postReactions" on posts.id = "postReactions"."postId" where "postReactions"."userId"=`${queryUserId}` and "postReactions"."isLike"=true)
+            
+            });
+        }
         return this.model.findAll({
             where,
             attributes: {
@@ -47,7 +56,7 @@ class PostRepository extends BaseRepository {
             }, {
                 model: PostReactionModel,
                 attributes: ['isLike'],
-                // duplicating: false,
+                duplicating: false,
                 include: {
                     model: UserModel,
                     attributes: ['id', 'username']
@@ -55,11 +64,11 @@ class PostRepository extends BaseRepository {
             }],
             group: [
                 'post.id',
-                // 'image.id',
-                // 'user.id',
-                // 'user->image.id',
-                // 'postReactions.id',
-                // 'postReactions->user.id'
+                'image.id',
+                'user.id',
+                'user->image.id',
+                'postReactions.id',
+                'postReactions->user.id'
             ],
             order: [['createdAt', 'DESC']],
             offset,

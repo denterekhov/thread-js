@@ -37,7 +37,8 @@ class Thread extends React.Component {
             () => {
                 Object.assign(this.postsFilter, {
                     userId: this.state.showOtherPeoplesPosts ? this.props.userId : undefined,
-                    from: 0
+                    from: 0,
+                    likes: ''
                 });
                 this.props.loadPosts(this.postsFilter);
                 const { from, count } = this.postsFilter;
@@ -52,16 +53,16 @@ class Thread extends React.Component {
                 showOtherPeoplesPosts: false,
                 showPostsLikedByMe: !showPostsLikedByMe
             }),
-            // () => {
-            //     Object.assign(this.postsFilter, {
-            //         userId: this.state.showPostsLikedByMe ? this.props.userId : undefined,
-            //         from: 0,
-            //         // comments: this.state.showPostsLikedByMe || ''
-            //     });
-            //     this.props.loadPosts(this.postsFilter);
-            //     const { from, count } = this.postsFilter;
-            //     this.postsFilter.from = from + count;
-            // }
+            () => {
+                Object.assign(this.postsFilter, {
+                    userId: this.state.showPostsLikedByMe ? this.props.userId : undefined,
+                    from: 0,
+                    likes: this.state.showPostsLikedByMe || ''
+                });
+                this.props.loadPosts(this.postsFilter);
+                const { from, count } = this.postsFilter;
+                this.postsFilter.from = from + count;
+            }
         );
     };
 
