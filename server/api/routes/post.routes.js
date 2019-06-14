@@ -18,7 +18,7 @@ router
         .catch(next))
     .put('/:id', (req, res, next) => postService.updatePostById(req.params.id, req.body) // user added to the request in the jwt strategy, see passport config
         .then((post) => {
-            req.io.emit('update_post', post); // notify all users that a new post was created
+            req.io.emit('update_post', post); // notify all users that a post was updated
             return res.send(post);
         })
         .catch(next))

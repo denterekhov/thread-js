@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Comment as CommentUI, Header } from 'semantic-ui-react';
 import moment from 'moment';
-import { togglePostLike, removePost, toggleExpandedPost, addComment, removeComment, toggleCommentLike } from 'src/containers/Thread/actions';
+import { togglePostLike, removePost, toggleExpandedPost, addComment, updateComment, removeComment, editComment, toggleCommentLike } from 'src/containers/Thread/actions';
 import Post from 'src/components/Post';
 import Comment from 'src/components/Comment';
 import AddComment from 'src/components/AddComment';
@@ -28,6 +28,7 @@ class ExpandedPost extends React.Component {
                         <Modal.Content>
                             <Post
                                 post={post}
+                                isExpanded
                                 removePost={props.removePost}
                                 togglePostLike={props.togglePostLike}
                                 toggleExpandedPost={props.toggleExpandedPost}
@@ -47,11 +48,13 @@ class ExpandedPost extends React.Component {
                                             comment={comment}
                                             currentUserId={props.userId}
                                             removeComment={props.removeComment}
+                                            editComment={props.editComment}
+                                            updateComment={props.updateComment}
                                             toggleCommentLike={props.toggleCommentLike}
                                         />
                                     ))
                                 }
-                                <AddComment postId={post.id} addComment={props.addComment} />
+                                <AddComment postId={post.id} addComment={props.addComment} updateComment={props.updateComment} editingComment={props.editingComment} />
                             </CommentUI.Group>
                         </Modal.Content>
                     )
@@ -68,12 +71,14 @@ ExpandedPost.propTypes = {
     togglePostLike: PropTypes.func.isRequired,
     removePost: PropTypes.func.isRequired,
     addComment: PropTypes.func.isRequired,
+    updateComment: PropTypes.func.isRequired,
     sharePost: PropTypes.func.isRequired,
     userId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = rootState => ({
     post: rootState.posts.expandedPost,
+    editingComment: rootState.posts.editingComment,
     userId: rootState.profile.user.id
 });
 
@@ -83,8 +88,9 @@ const actions = {
     toggleExpandedPost,
     addComment,
     removeComment,
+    editComment,
+    updateComment,
     toggleCommentLike
-    // dislikeComment
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

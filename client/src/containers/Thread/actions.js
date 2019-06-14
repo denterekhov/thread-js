@@ -3,10 +3,14 @@ import * as commentService from 'src/services/commentService';
 import {
     ADD_POST,
     REMOVE_POST,
+    EDIT_POST,
+    EDIT_COMMENT,
     REMOVE_COMMENT,
     LOAD_MORE_POSTS,
     SET_ALL_POSTS,
-    SET_EXPANDED_POST
+    SET_EXPANDED_POST,
+    SET_EDITING_POST,
+    SET_EDITING_COMMENT
 } from './actionTypes';
 
 const setPostsAction = posts => ({
@@ -29,14 +33,32 @@ const setExpandedPostAction = post => ({
     post
 });
 
+const setEditingPostAction = () => ({
+    type: SET_EDITING_POST,
+});
+
+const setEditingCommentAction = () => ({
+    type: SET_EDITING_COMMENT,
+});
+
 export const removePost = postId => ({
     type: REMOVE_POST,
     postId
 });
 
+export const editPost = post => ({
+    type: EDIT_POST,
+    post
+});
+
 export const removeComment = commentId => ({
     type: REMOVE_COMMENT,
     commentId
+});
+
+export const editComment = comment => ({
+    type: EDIT_COMMENT,
+    comment
 });
 
 export const loadPosts = filter => async (dispatch) => {
@@ -63,9 +85,24 @@ export const addPost = post => async (dispatch) => {
 export const updatePost = (postId, text) => async (dispatch, getRootState) => {
     const { id } = await postService.updatePost(postId, text);
     const updatedPost = await postService.getPost(id);
-    const { posts } = getRootState();
+    const { posts: { posts } } = getRootState();
+    dispatch(setEditingPostAction());
     const newPosts = posts.map(post => (post.id !== updatedPost.id ? post : updatedPost));
     dispatch(setPostsAction(newPosts));
+};
+
+export const updateComment = (commentId, text) => async (dispatch, getRootState) => {
+    const { id } = await commentService.updateComment(commentId, text);
+    const updatedComment = await commentService.getComment(id);
+    const { posts: { expandedPost } } = getRootState();
+    dispatch(setEditingCommentAction());
+    const updatedExpandedPost = {
+        ...expandedPost,
+        comments: expandedPost.comments.map(comment => (
+            comment.id !== updatedComment.id ? comment : updatedComment
+        ))
+    };
+    dispatch(setExpandedPostAction(updatedExpandedPost));
 };
 
 export const toggleExpandedPost = postId => async (dispatch) => {
@@ -117,7 +154,9 @@ export const toggleCommentLike = (commentId, isLike) => async (dispatch, getRoot
     } = getRootState();
 
     const mapCommentReactions = (comment) => {
-        const filteredCommentReactions = comment.commentReactions.filter(reaction => reaction.user.id !== currentUserId);
+        const filteredCommentReactions = comment.commentReactions.filter(
+            reaction => reaction.user.id !== currentUserId
+        );
         return {
             ...comment,
             commentReactions: id

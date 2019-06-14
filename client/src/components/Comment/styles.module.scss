@@ -1,17 +1,21 @@
 :global(.ui) {
-    :local(.comment) {
-        // overflow: auto; 
-
-        >i {
-            position: absolute;
-            top: 10px;
-            right: 0;
-        }
+    :local(.comment)>i  {
+        position: absolute;
     }
 }
 
 :global(.ui.basic.label):local(.toolbarBtn) {
     border: none
+}
+
+:global(i.edit) {
+    top: 10px;
+    right: 20px;
+}
+
+:global(i.close) {
+    top: 10px;
+    right: 0;
 }
 
 :global(i.up),

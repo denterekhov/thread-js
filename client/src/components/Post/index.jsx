@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Image, Label, Icon } from 'semantic-ui-react';
+import { Card, Image, Label, Icon, Button } from 'semantic-ui-react';
 import moment from 'moment';
 
 import styles from './styles.module.scss';
@@ -9,8 +9,10 @@ const R = require('ramda');
 
 const Post = ({
     post,
+    isExpanded,
     togglePostLike,
     removePost,
+    editPost,
     toggleExpandedPost,
     sharePost,
     currentUserId,
@@ -63,8 +65,28 @@ const Post = ({
         if (closeModal) closeModal();
     };
 
+    const createEditButton = () => (currentUserId === userId
+        ? (
+            <button
+                type="button"
+                className="ui blue right floated button"
+                onClick={() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                    });
+                    editPost({ body, id });
+                }}
+            >
+            Edit
+            </button>
+        )
+        : null);
+
+    const editButton = !isExpanded && createEditButton();
+
     const createDeleteButton = () => (currentUserId === userId
-        ? (<button type="submit" className="ui red right floated button" onClick={deletePost}>Delete post</button>)
+        ? (<button type="submit" className="ui red right floated button" onClick={deletePost}>Delete</button>)
         : null);
 
     const deleteButton = createDeleteButton();
@@ -102,7 +124,10 @@ const Post = ({
                 <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => sharePost(id)}>
                     <Icon name="share alternate" />
                 </Label>
-                {deleteButton}
+                <Button.Group floated="right">
+                    {editButton}
+                    {deleteButton}
+                </Button.Group>
             </Card.Content>
         </Card>
     );
@@ -111,8 +136,10 @@ const Post = ({
 
 Post.propTypes = {
     post: PropTypes.objectOf(PropTypes.any).isRequired,
+    isExpanded: PropTypes.bool,
     togglePostLike: PropTypes.func.isRequired,
     removePost: PropTypes.func.isRequired,
+    editPost: PropTypes.func,
     toggleExpandedPost: PropTypes.func.isRequired,
     sharePost: PropTypes.func.isRequired,
     currentUserId: PropTypes.string.isRequired,
@@ -121,7 +148,9 @@ Post.propTypes = {
 
 
 Post.defaultProps = {
-    closeModal: undefined
+    isExpanded: undefined,
+    closeModal: undefined,
+    editPost: undefined
 };
 
 export default Post;

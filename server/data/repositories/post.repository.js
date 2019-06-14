@@ -16,7 +16,6 @@ class PostRepository extends BaseRepository {
             count: limit,
             userId: queryUserId
         } = filter;
-        console.log('queryUserId: ', queryUserId);
 
         const where = {};
         if (queryUserId) {
@@ -138,70 +137,3 @@ class PostRepository extends BaseRepository {
 }
 
 export default new PostRepository(PostModel);
-
-
-// {
-    // model: CommentModel,
-    // include: [{
-    //     model: CommentReactionModel,
-    //     attributes: {
-    //         include: [
-    //             [sequelize.fn('SUM', sequelize.literal(likeCommentCase(true))), 'likeCommentCount'],
-    //             [sequelize.fn('SUM', sequelize.literal(likeCommentCase(false))), 'dislikeCommentCount']
-    //         ]
-    //     },
-    // }, {
-    //     model: PostReactionModel,
-    //     attributes: ['id', 'username'],
-    //     include: {
-    //         model: ImageModel,
-    //         attributes: ['id', 'link']
-    //     }
-    // }]
-// }
-
-
-//SOMETHING WORKING
-// {
-//     model: CommentModel,
-//     include: [{
-//         model: UserModel,
-//         attributes: ['id', 'username'],
-//         include: {
-//             model: ImageModel,
-//             attributes: ['id', 'link']
-//         }
-//     }, 
-//     {
-//         model: CommentReactionModel,
-//         attributes: ['isLike'],
-//             include: 
-//                 {
-//                   model: UserModel,
-//                   attributes: ['username']
-//                   // [sequelize.fn('SUM', sequelize.literal(likeCommentCase(true))), 'likeCommentCount'],
-//                   // [sequelize.fn('SUM', sequelize.literal(likeCommentCase(false))), 'dislikeCommentCount']
-//                 }
-        
-//     }
-//     ]
-// }
-
-
-
-// {
-//   model: PostReactionModel,
-//   attributes: ['id', 'isLike'],
-//   // duplicating: false,
-//   include: {
-//       model: UserModel,
-//       attributes: ['username', 'id']
-//   }
-
-  // attributes: ['isLike'], //IT WORKS
-  // duplicating: false,
-  // include: {
-  //     model: UserModel,
-  //     attributes: ['username']
-  // }
-// }

@@ -12,7 +12,8 @@ const Comment = (props) => {
     const { comment: { body, createdAt, id, user, userId, commentReactions },
         currentUserId,
         removeComment,
-        toggleCommentLike
+        toggleCommentLike,
+        editComment
     } = props;
 
     const date = moment(createdAt).fromNow();
@@ -26,7 +27,10 @@ const Comment = (props) => {
         return R.countBy(Boolean)(likesArray);
     };
 
-    const { true: likeCommentCount = 0, false: dislikeCommentCount = 0 } = countLikesAndDislikes(commentReactions);
+    const {
+        true: likeCommentCount = 0,
+        false: dislikeCommentCount = 0
+    } = countLikesAndDislikes(commentReactions);
 
     // Show likers and dislikers
     const createLikersList = (isLike) => {
@@ -46,15 +50,20 @@ const Comment = (props) => {
     const dislikes = dislikers && createLikersList(false);
 
     // Create remove icon
-    const createRemoveIcon = () => (currentUserId === userId
-        ? <Icon link name="close" onClick={() => removeComment(id)} />
+    const createIcons = () => (currentUserId === userId
+        ? (
+            <>
+                <Icon link name="edit" onClick={() => editComment({ body, id })} />
+                <Icon link name="close" onClick={() => removeComment(id)} />
+            </>
+        )
         : null);
 
-    const removeIcon = createRemoveIcon();
+    const editAndRemoveIcons = createIcons();
 
     return (
         <CommentUI className={styles.comment}>
-            {removeIcon}
+            {editAndRemoveIcons}
             <CommentUI.Avatar src={getUserImgLink(user.image)} />
             <CommentUI.Content>
                 <CommentUI.Author as="a">
@@ -85,7 +94,8 @@ Comment.propTypes = {
     comment: PropTypes.objectOf(PropTypes.any).isRequired,
     currentUserId: PropTypes.string.isRequired,
     removeComment: PropTypes.func.isRequired,
-    toggleCommentLike: PropTypes.func.isRequired
+    toggleCommentLike: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired
     // dislikeComment: PropTypes.func.isRequired
 };
 

@@ -19,12 +19,21 @@ export const getComment = async (id) => {
 
 export const toggleCommentLike = async (commentId, isLike) => {
     const response = await callWebApi({
-        endpoint: '/api/comments/react',
+        endpoint: `/api/comments/react/${commentId}`,
         type: 'PUT',
         request: {
             commentId,
             isLike
         }
+    });
+    return response.json();
+};
+
+export const updateComment = async (commentId, request) => {
+    const response = await callWebApi({
+        endpoint: `/api/comments/${commentId}`,
+        type: 'PUT',
+        request
     });
     return response.json();
 };
