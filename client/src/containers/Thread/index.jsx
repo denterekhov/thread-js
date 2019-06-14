@@ -18,7 +18,8 @@ class Thread extends React.Component {
         super(props);
         this.state = {
             sharedPostId: undefined,
-            showOtherPeoplesPosts: false
+            showOtherPeoplesPosts: false,
+            showPostsLikedByMe: false
         };
         this.postsFilter = {
             userId: undefined,
@@ -27,9 +28,12 @@ class Thread extends React.Component {
         };
     }
 
-    togglePosts = () => {
+    toggleOthersPeoplePosts = () => {
         this.setState(
-            ({ showOtherPeoplesPosts }) => ({ showOtherPeoplesPosts: !showOtherPeoplesPosts }),
+            ({ showOtherPeoplesPosts }) => ({
+                showPostsLikedByMe: false,
+                showOtherPeoplesPosts: !showOtherPeoplesPosts
+            }),
             () => {
                 Object.assign(this.postsFilter, {
                     userId: this.state.showOtherPeoplesPosts ? this.props.userId : undefined,
@@ -39,6 +43,25 @@ class Thread extends React.Component {
                 const { from, count } = this.postsFilter;
                 this.postsFilter.from = from + count;
             }
+        );
+    };
+
+    togglePostsLikedByMe = () => {
+        this.setState(
+            ({ showPostsLikedByMe }) => ({
+                showOtherPeoplesPosts: false,
+                showPostsLikedByMe: !showPostsLikedByMe
+            }),
+            // () => {
+            //     Object.assign(this.postsFilter, {
+            //         userId: this.state.showPostsLikedByMe ? this.props.userId : undefined,
+            //         from: 0,
+            //         // comments: this.state.showPostsLikedByMe || ''
+            //     });
+            //     this.props.loadPosts(this.postsFilter);
+            //     const { from, count } = this.postsFilter;
+            //     this.postsFilter.from = from + count;
+            // }
         );
     };
 
@@ -68,7 +91,7 @@ class Thread extends React.Component {
 
     render() {
         const { posts = [], expandedPost, hasMorePosts, ...props } = this.props;
-        const { showOtherPeoplesPosts, sharedPostId } = this.state;
+        const { showOtherPeoplesPosts, showPostsLikedByMe, sharedPostId } = this.state;
         return (
             <div className={styles.threadContent}>
                 <div className={styles.addPostForm}>
@@ -80,7 +103,8 @@ class Thread extends React.Component {
                     />
                 </div>
                 <div className={styles.toolbar}>
-                    <Checkbox toggle label="Show only other people's posts" checked={showOtherPeoplesPosts} onChange={this.togglePosts} />
+                    <Checkbox toggle label="Show only other people's posts" checked={showOtherPeoplesPosts} onChange={this.toggleOthersPeoplePosts} />
+                    <Checkbox toggle label="Show only posts liked by me" checked={showPostsLikedByMe} onChange={this.togglePostsLikedByMe} />
                 </div>
                 <InfiniteScroll
                     pageStart={0}
