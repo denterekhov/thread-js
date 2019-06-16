@@ -29,3 +29,54 @@ export const getCurrentUser = async () => {
         return null;
     }
 };
+
+export const setUserStatus = async (request) => {
+    try {
+        const response = await callWebApi({
+            endpoint: '/api/auth/status',
+            type: 'PUT',
+            request
+        });
+        return response.json();
+    } catch (e) {
+        return null;
+    }
+};
+
+export const resetPassword = async (request) => {
+    try {
+        const response = await callWebApi({
+            endpoint: '/api/auth/forgot',
+            type: 'POST',
+            request
+        });
+        return response.json();
+    } catch (e) {
+        return null;
+    }
+};
+
+export const checkToken = async (token) => {
+    try {
+        const response = await callWebApi({
+            endpoint: `/api/auth/reset/${token}`,
+            type: 'GET'
+        });
+        return response.json();
+    } catch (e) {
+        return null;
+    }
+};
+
+export const setNewPassword = async (request) => {
+    try {
+        const response = await callWebApi({
+            endpoint: '/api/auth/new_password',
+            type: 'POST',
+            request
+        });
+        return response.json();
+    } catch (e) {
+        return null;
+    }
+};

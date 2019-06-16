@@ -8,6 +8,29 @@ const setUser = user => async dispatch => dispatch({
     user
 });
 
+export const setUserStatus = status => async (dispatch, getRootState) => {
+    const [{ id }] = await authService.setUserStatus(status);
+    if (id) {
+        const user = await authService.getCurrentUser();
+        setUser(user)(dispatch, getRootState);
+    }
+};
+
+export const resetPassword = email => async () => {
+    const { body } = await authService.resetPassword(email);
+    return body;
+};
+
+export const checkToken = token => async () => {
+    const { body } = await authService.checkToken(token);
+    return body;
+};
+
+export const setNewPassword = request => async () => {
+    const { body } = await authService.setNewPassword(request);
+    return body;
+};
+
 const setIsLoading = isLoading => async dispatch => dispatch({
     type: SET_IS_LOADING,
     isLoading

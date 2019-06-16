@@ -14,6 +14,18 @@ export default (orm, DataTypes) => {
             type: DataTypes.STRING,
             unique: true
         },
+        status: {
+            allowNull: true,
+            type: DataTypes.STRING,
+        },
+        resetPasswordToken: {
+            allowNull: true,
+            type: DataTypes.STRING,
+        },
+        resetPasswordExpires: {
+            allowNull: true,
+            type: DataTypes.INTEGER,
+        },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE
     }, {});

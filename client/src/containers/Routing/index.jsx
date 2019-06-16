@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Thread from 'src/containers/Thread';
 import Login from 'src/components/Login';
 import Registration from 'src/components/Registration';
+import ForgotPassword from 'src/components/ForgotPassword';
+import ResetPassword from 'src/components/ResetPassword';
 import Profile from 'src/containers/Profile';
 import Header from 'src/components/Header';
 import SharedPost from 'src/containers/SharedPost';
@@ -53,6 +55,8 @@ class Routing extends React.Component {
                             <Switch>
                                 <Route exact path="/login" render={this.renderLogin} />
                                 <Route exact path="/registration" render={this.renderRegistration} />
+                                <Route exact path="/forgot" component={ForgotPassword} />
+                                <Route path="/reset/:token" component={ResetPassword} />
                                 <PrivateRoute exact path="/" component={Thread} />
                                 <PrivateRoute exact path="/profile" component={Profile} />
                                 <PrivateRoute path="/share/:postHash" component={SharedPost} />
@@ -100,3 +104,4 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Routing);
+// <Route exact path="/new_password" component={NewPassword} />
