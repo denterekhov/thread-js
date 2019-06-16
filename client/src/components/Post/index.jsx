@@ -40,7 +40,10 @@ const Post = ({
         return R.countBy(Boolean)(likesArray);
     };
 
-    const { true: likePostCount = 0, false: dislikePostCount = 0 } = countLikesAndDislikes(postReactions);
+    const {
+        true: likePostCount = 0,
+        false: dislikePostCount = 0
+    } = countLikesAndDislikes(postReactions);
 
     // Show likers and dislikers
     const createLikersList = (isLike) => {

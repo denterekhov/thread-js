@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize';
 import sequelize from '../db/connection';
 import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel, CommentReactionModel } from '../models/index';
-import commentReactionRepository from './comment-reaction.repository';
 import BaseRepository from './base.repository';
 
 const Op = Sequelize.Op;

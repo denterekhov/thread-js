@@ -24,6 +24,18 @@ export default {
                     allowNull: false,
                     type: Sequelize.STRING
                 },
+                status: {
+                    allowNull: true,
+                    type: Sequelize.STRING,
+                },
+                resetPasswordToken: {
+                    allowNull: true,
+                    type: Sequelize.STRING,
+                },
+                resetPasswordExpires: {
+                    allowNull: true,
+                    type: Sequelize.INTEGER,
+                },
                 createdAt: Sequelize.DATE,
                 updatedAt: Sequelize.DATE
             }, { transaction }),
