@@ -14,7 +14,7 @@ import { setUserStatus } from './actions';
 
 const Profile = ({ user, ...props }) => {
     const [isUserStatusEditing, setIsUserStatusEditing] = useState(false);
-    const [statusValue, setStatusValue] = useState(user.status);
+    const [statusValue, setStatusValue] = useState(user.status || '');
     const statusRef = createRef();
 
     const sendUserStatus = () => {

@@ -9,7 +9,7 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, removePost, editPost, togglePostLike, toggleExpandedPost, addPost, updatePost } from './actions';
+import { loadPosts, loadMorePosts, removePost, editPost, togglePostLike, toggleExpandedPost, addPost, updatePost, sharePost } from './actions';
 
 import styles from './styles.module.scss';
 
@@ -80,15 +80,7 @@ class Thread extends React.Component {
         this.setState({ sharedPostId: undefined });
     }
 
-    // editPost = (editingPostId, editingPostText) => {
-    //     this.setState({
-    //         editingPostId,
-    //         editingPostText
-    //     });
-    // };
-
     uploadImage = file => imageService.uploadImage(file);
-
 
     render() {
         const { posts = [], expandedPost, hasMorePosts, ...props } = this.props;
@@ -133,7 +125,7 @@ class Thread extends React.Component {
                 }
                 {
                     sharedPostId
-                    && <SharedPostLink postId={sharedPostId} close={this.closeSharePost} />
+                    && <SharedPostLink postId={sharedPostId} close={this.closeSharePost} sharePost={props.sharePost} userName={props.userName} email={props.email} />
                 }
             </div>
         );
@@ -152,7 +144,8 @@ Thread.propTypes = {
     togglePostLike: PropTypes.func.isRequired,
     addPost: PropTypes.func.isRequired,
     removePost: PropTypes.func.isRequired,
-    updatePost: PropTypes.func.isRequired
+    updatePost: PropTypes.func.isRequired,
+    sharePost: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -168,7 +161,9 @@ const mapStateToProps = rootState => ({
     hasMorePosts: rootState.posts.hasMorePosts,
     expandedPost: rootState.posts.expandedPost,
     editingPost: rootState.posts.editingPost,
-    userId: rootState.profile.user.id
+    userId: rootState.profile.user.id,
+    userName: rootState.profile.user.username,
+    email: rootState.profile.user.email
 });
 
 const actions = {
@@ -179,7 +174,8 @@ const actions = {
     editPost,
     toggleExpandedPost,
     addPost,
-    updatePost
+    updatePost,
+    sharePost
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

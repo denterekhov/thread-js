@@ -6,7 +6,8 @@ import styles from './styles.module.scss';
 
 class SharedPostLink extends React.Component {
     state = {
-        copied: false
+        copied: false,
+        emailInput: ''
     };
 
     copyToClipboard = (e) => {
@@ -16,9 +17,20 @@ class SharedPostLink extends React.Component {
         this.setState({ copied: true });
     };
 
+    sharePost = (e) => {
+        const { userName, email } = this.props;
+        const { emailInput } = this.state;
+        this.props.sharePost({
+            to: emailInput,
+            from: email,
+            subject: `User ${userName} shared a post with you`,
+            text: `User ${userName} shared a post with you. If want want to read it, please follow this link ${this.input.props.value}`
+        });
+    };
+
     render() {
         const { postId, close } = this.props;
-        const { copied } = this.state;
+        const { copied, emailInput } = this.state;
         return (
             <Modal open onClose={close}>
                 <Modal.Header className={styles.header}>
@@ -37,6 +49,13 @@ class SharedPostLink extends React.Component {
                         value={`${window.location.origin}/share/${postId}`}
                         ref={(input) => { this.input = input; }}
                     />
+                    <Input
+                        fluid
+                        action={{ color: 'olive', labelPosition: 'right', icon: 'share', content: 'Share', onClick: this.sharePost }}
+                        placeholder="Enter email to share this post"
+                        onChange={e => this.setState({ emailInput: e.target.value })}
+                        value={emailInput}
+                    />
                 </Modal.Content>
             </Modal>
         );
@@ -45,7 +64,10 @@ class SharedPostLink extends React.Component {
 
 SharedPostLink.propTypes = {
     postId: PropTypes.string.isRequired,
-    close: PropTypes.func.isRequired
+    close: PropTypes.func.isRequired,
+    sharePost: PropTypes.func.isRequired,
+    userName: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired
 };
 
 export default SharedPostLink;

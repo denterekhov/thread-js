@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import * as postService from '../services/post.service';
+import { SENDGRID_API_KEY } from '../../config/email.config';
 
 const router = Router();
+const sgMail = require('@sendgrid/mail');
 
 router
     .get('/', (req, res, next) => postService.getPosts(req.query)
@@ -25,11 +27,30 @@ router
     .put('/react/:id', (req, res, next) => postService.setReaction(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
         .then((reaction) => {
             if (reaction.post && (reaction.post.userId !== req.user.id)) {
+                sgMail.setApiKey(SENDGRID_API_KEY);
+                const msg = {
+                    to: reaction.post.user.email,
+                    from: 'support@thread-js.com',
+                    subject: 'Your post was liked by someone',
+                    text: 'Your post was liked by someone',
+                };
+                sgMail.send(msg);
                 // notify a user if someone (not himself) liked his post
                 req.io.to(reaction.post.userId).emit('like', 'Your post was liked!');
             }
             return res.send(reaction);
         })
-        .catch(next));
+        .catch(next))
+    .post('/share', (req, res, next) => {
+        sgMail.setApiKey(SENDGRID_API_KEY);
+        const msg = {
+            to: req.body.to,
+            from: req.body.from,
+            subject: req.body.subject,
+            text: req.body.text,
+        };
+        sgMail.send(msg);
+        return res.json({body: true});
+    });
 
 export default router;

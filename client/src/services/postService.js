@@ -48,5 +48,14 @@ export const updatePost = async (postId, request) => {
     return response.json();
 };
 
+export const sharePost = async (request) => {
+    const response = await callWebApi({
+        endpoint: '/api/posts/share',
+        type: 'POST',
+        request
+    });
+    return response.json();
+};
+
 // should be replaced by appropriate function
 export const getPostByHash = async hash => getPost(hash);
