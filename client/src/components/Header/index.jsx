@@ -44,7 +44,7 @@ const Header = ({ user, logout, ...props }) => {
                                 placeholder="Set your status here"
                                 type="text"
                                 disabled={!isUserStatusEditing}
-                                value={statusValue}
+                                value={statusValue || ''}
                                 onChange={e => setStatusValue(e.target.value)}
                             />
                             <Icon link name="edit outline" onClick={!isUserStatusEditing ? () => setIsUserStatusEditing(true) : sendUserStatus} />

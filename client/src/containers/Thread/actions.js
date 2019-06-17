@@ -199,3 +199,8 @@ export const addComment = request => async (dispatch, getRootState) => {
         dispatch(setExpandedPostAction(mapComments(expandedPost)));
     }
 };
+
+export const sharePost = request => async () => {
+    const { body } = await postService.sharePost(request);
+    return body;
+};

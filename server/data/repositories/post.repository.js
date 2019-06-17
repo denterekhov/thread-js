@@ -6,7 +6,6 @@ import BaseRepository from './base.repository';
 const Op = Sequelize.Op;
 
 const likePostCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
-const likeCommentCase = bool => `SELECT "commentReactions"."isLike", CASE WHEN "isLike" = ${bool} THEN 1 ELSE 0 END FROM "commentReactions"`;
 
 class PostRepository extends BaseRepository {
     async getPosts(filter) {
@@ -19,17 +18,15 @@ class PostRepository extends BaseRepository {
 
         const where = {};
         if (queryUserId && !likes) {
-            console.log('not likes: ', likes);
-
             Object.assign(where, { userId: { [Op.ne]: queryUserId } });
         }
+
         if (queryUserId && likes) {
-            console.log('likes: ', likes);
-            Object.assign(where, {"$postReactions.userId$": `${queryUserId}`, "$postReactions.isLike$": true
-                // (select "posts"."userId" from posts inner join "postReactions" on posts.id = "postReactions"."postId" where "postReactions"."userId"=`${queryUserId}` and "postReactions"."isLike"=true)
-            
+            Object.assign(where, {
+                "$postReactions.userId$": `${queryUserId}`, "$postReactions.isLike$": true
             });
         }
+
         return this.model.findAll({
             where,
             attributes: {
@@ -89,7 +86,6 @@ class PostRepository extends BaseRepository {
                 'image.id',
                 'postReactions.id',
                 'postReactions->user.id',
-                // 'postReactions->user.username'
             ],
             where: { id },
             attributes: {
@@ -100,8 +96,6 @@ class PostRepository extends BaseRepository {
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
                     [sequelize.fn('SUM', sequelize.literal(likePostCase(true))), 'likePostCount'],
                     [sequelize.fn('SUM', sequelize.literal(likePostCase(false))), 'dislikePostCount'],
-                    // [sequelize.fn('SUM', sequelize.literal(`CASE WHEN public.commentReactions."isLike" = true THEN 1 ELSE 0 END`)), 'likeCommentCount'],
-                    // [sequelize.fn('SUM', sequelize.literal(likeCommentCase(false))), 'dislikeCommentCount']
                 ]
             },
             include: [{
