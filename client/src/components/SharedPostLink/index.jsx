@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import validator from 'validator';
 import { Modal, Input, Icon } from 'semantic-ui-react';
 
 import styles from './styles.module.scss';
@@ -17,15 +18,24 @@ class SharedPostLink extends React.Component {
         this.setState({ copied: true });
     };
 
-    sharePost = (e) => {
+    sharePost = () => {
         const { userName, email } = this.props;
         const { emailInput } = this.state;
-        this.props.sharePost({
-            to: emailInput,
-            from: email,
-            subject: `User ${userName} shared a post with you`,
-            text: `User ${userName} shared a post with you. If want want to read it, please follow this link ${this.input.props.value}`
-        });
+        if (validator.isEmail(emailInput)) {
+            this.props.sharePost({
+                to: emailInput,
+                from: email,
+                subject: `User ${userName} shared a post with you`,
+                text: `User ${userName} shared a post with you. If want want to read it, please follow this link ${this.input.props.value}`
+            });
+            this.setState({
+                emailInput: 'Post was successfully shared!'
+            });
+        } else {
+            this.setState({
+                emailInput: 'Please, enter valid email'
+            });
+        }
     };
 
     render() {
