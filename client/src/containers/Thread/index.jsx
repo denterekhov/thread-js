@@ -124,8 +124,15 @@ class Thread extends React.Component {
                     && <ExpandedPost sharePost={this.sharePost} />
                 }
                 {
-                    sharedPostId
-                    && <SharedPostLink postId={sharedPostId} close={this.closeSharePost} sharePost={props.sharePost} userName={props.userName} email={props.email} />
+                    sharedPostId && (
+                        <SharedPostLink
+                            postId={sharedPostId}
+                            close={this.closeSharePost}
+                            sharePost={props.sharePost}
+                            userName={props.userName}
+                            email={props.email}
+                        />
+                    )
                 }
             </div>
         );

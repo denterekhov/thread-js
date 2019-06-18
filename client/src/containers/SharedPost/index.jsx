@@ -11,7 +11,6 @@ class SharedPost extends React.Component {
         this.props.toggleExpandedPost(match.params.postHash);
     }
 
-
     render() {
         return <Redirect to="/" />;
     }

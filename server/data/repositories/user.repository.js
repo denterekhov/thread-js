@@ -32,10 +32,10 @@ class UserRepository extends BaseRepository {
         });
     }
     
-    async updateUserStatusById(id, data) {
-        const result = await this.model.update({ 
-            status: data 
-        }, { 
+    async updateUserPropById({id, ...prop}) {
+        const result = await this.model.update(
+            prop, 
+        { 
             where: { id },
             returning: true
         });

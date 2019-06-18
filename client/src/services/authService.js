@@ -30,10 +30,10 @@ export const getCurrentUser = async () => {
     }
 };
 
-export const setUserStatus = async (request) => {
+export const setUserProps = async (request) => {
     try {
         const response = await callWebApi({
-            endpoint: '/api/auth/status',
+            endpoint: '/api/auth/update_user',
             type: 'PUT',
             request
         });

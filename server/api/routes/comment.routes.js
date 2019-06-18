@@ -10,7 +10,7 @@ router
     .post('/', (req, res, next) => commentService.create(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
         .then(comment => res.send(comment))
         .catch(next))
-    .put('/:id', (req, res, next) => commentService.updateCommentById(req.params.id, req.body) // user added to the request in the jwt strategy, see passport config
+    .put('/:id', (req, res, next) => commentService.updateCommentById(req.params.id, req.body)
         .then((comment) => {
             req.io.emit('update_comment', comment); // notify all users that a comment was updated
             return res.send(comment);

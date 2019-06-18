@@ -104,4 +104,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Routing);
-// <Route exact path="/new_password" component={NewPassword} />
