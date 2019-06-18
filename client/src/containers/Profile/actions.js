@@ -8,8 +8,8 @@ const setUser = user => async dispatch => dispatch({
     user
 });
 
-export const setUserStatus = status => async (dispatch, getRootState) => {
-    const [{ id }] = await authService.setUserStatus(status);
+export const setUserProps = props => async (dispatch, getRootState) => {
+    const [{ id }] = await authService.setUserProps(props);
     if (id) {
         const user = await authService.getCurrentUser();
         setUser(user)(dispatch, getRootState);

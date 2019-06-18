@@ -35,8 +35,6 @@ class PostRepository extends BaseRepository {
                         (SELECT COUNT(*)
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
-            //         [sequelize.fn('SUM', sequelize.literal(likePostCase(true))), 'likeCount'],
-            //         [sequelize.fn('SUM', sequelize.literal(likePostCase(false))), 'dislikeCount']
                 ]
             },
             include: [{
@@ -128,7 +126,6 @@ class PostRepository extends BaseRepository {
             }, {
                 model: PostReactionModel,
                 attributes: ['isLike'],
-                // duplicating: false,
                 include: {
                     model: UserModel,
                     attributes: ['id', 'username']

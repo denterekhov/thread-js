@@ -21,7 +21,7 @@ router
     .get('/user', jwtMiddleware, (req, res, next) => userService.getUserById(req.user.id) // user added to the request in the jwt strategy, see passport config
         .then(data => res.send(data))
         .catch(next))
-    .put('/status', jwtMiddleware, (req, res, next) => userService.setUserStatus(req.body.id, req.body.status) // user added to the request in the jwt strategy, see passport config
+    .put('/update_user', jwtMiddleware, (req, res, next) => userService.setUserProps(req.body) // user added to the request in the jwt strategy, see passport config
         .then(data => res.send(data))
         .catch(next))
     .post('/forgot', function(req, res, next) {

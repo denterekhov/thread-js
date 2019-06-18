@@ -17,4 +17,4 @@ export const setNewPassword = async(token, password) => await userRepository.set
     password: await cryptoHelper.encrypt(password)
 });
 
-export const setUserStatus = (id, status) => userRepository.updateUserStatusById(id, status);
+export const setUserProps = (request) => userRepository.updateUserPropById(request);

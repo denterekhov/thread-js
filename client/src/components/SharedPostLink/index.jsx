@@ -26,7 +26,7 @@ class SharedPostLink extends React.Component {
                 to: emailInput,
                 from: email,
                 subject: `User ${userName} shared a post with you`,
-                text: `User ${userName} shared a post with you. If want want to read it, please follow this link ${this.input.props.value}`
+                text: `User ${userName} shared a post with you. If want to read it, please follow this link ${this.input.props.value}`
             });
             this.setState({
                 emailInput: 'Post was successfully shared!'

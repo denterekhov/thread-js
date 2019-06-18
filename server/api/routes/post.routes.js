@@ -18,13 +18,13 @@ router
             return res.send(post);
         })
         .catch(next))
-    .put('/:id', (req, res, next) => postService.updatePostById(req.params.id, req.body) // user added to the request in the jwt strategy, see passport config
+    .put('/:id', (req, res, next) => postService.updatePostById(req.params.id, req.body) 
         .then((post) => {
             req.io.emit('update_post', post); // notify all users that a post was updated
             return res.send(post);
         })
         .catch(next))
-    .put('/react/:id', (req, res, next) => postService.setReaction(req.user.id, req.body) // user added to the request in the jwt strategy, see passport config
+    .put('/react/:id', (req, res, next) => postService.setReaction(req.user.id, req.body)
         .then((reaction) => {
             if (reaction.post && (reaction.post.userId !== req.user.id)) {
                 sgMail.setApiKey(SENDGRID_API_KEY);

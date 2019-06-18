@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getUserImgLink } from 'src/helpers/imageHelper';
 import { Header as HeaderUI, Image, Grid, Icon, Button, Input } from 'semantic-ui-react';
-import { setUserStatus } from '../../containers/Profile/actions';
+import { setUserProps } from '../../containers/Profile/actions';
 
 import styles from './styles.module.scss';
 
@@ -15,9 +15,7 @@ const Header = ({ user, logout, ...props }) => {
     const statusRef = createRef();
 
     const sendUserStatus = () => {
-        // const status = statusRef.current.value;
-        // console.log('status: ', status);
-        props.setUserStatus({ status: statusValue, id: user.id });
+        props.setUserProps({ status: statusValue, id: user.id });
         setIsUserStatusEditing(false);
     };
 
@@ -26,6 +24,7 @@ const Header = ({ user, logout, ...props }) => {
             statusRef.current.focus();
         }
     }, [isUserStatusEditing, statusValue]);
+
     return (
         <div className={styles.headerWrp}>
             <Grid centered container columns="2">
@@ -40,14 +39,23 @@ const Header = ({ user, logout, ...props }) => {
                                 </HeaderUI>
                             </NavLink>
                             <Input
-                                ref={statusRef}
                                 placeholder="Set your status here"
                                 type="text"
-                                disabled={!isUserStatusEditing}
-                                value={statusValue || ''}
-                                onChange={e => setStatusValue(e.target.value)}
+                                disabled
+                                value={user.status}
                             />
-                            <Icon link name="edit outline" onClick={!isUserStatusEditing ? () => setIsUserStatusEditing(true) : sendUserStatus} />
+                            {isUserStatusEditing && (
+                                <>
+                                    <Input
+                                        ref={statusRef}
+                                        placeholder="Set your status here"
+                                        type="text"
+                                        value={statusValue}
+                                        onChange={e => setStatusValue(e.target.value)}
+                                    />
+                                </>
+                            )}
+                            <Icon link name={!isUserStatusEditing ? 'edit outline' : 'save'} onClick={!isUserStatusEditing ? () => setIsUserStatusEditing(true) : sendUserStatus} />
                         </>
                     )}
                 </Grid.Column>
@@ -66,13 +74,13 @@ const Header = ({ user, logout, ...props }) => {
 
 Header.propTypes = {
     logout: PropTypes.func.isRequired,
-    setUserStatus: PropTypes.func.isRequired,
+    setUserProps: PropTypes.func.isRequired,
     user: PropTypes.objectOf(PropTypes.any).isRequired
 };
 
 
 const actions = {
-    setUserStatus
+    setUserProps
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
@@ -81,5 +89,3 @@ export default connect(
     null,
     mapDispatchToProps
 )(Header);
-
-// export default Header;
