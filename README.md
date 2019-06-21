@@ -12,37 +12,6 @@
 
 Здесь перечислены основные фреймворки и библиотеки, используемые в проекте. Полный список используемых технологий для каждой части проекта находится в файлах package.json в папках client и server.
 
-#### Common
-1. ES2018
-2. [Git](https://git-scm.com/book/ru/v1/%D0%92%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5-%D0%9E%D1%81%D0%BD%D0%BE%D0%B2%D1%8B-Git "Git")
-3. [REST API](https://www.restapitutorial.com/lessons/restquicktips.html "REST API")
-4. [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token "JWT")
-5. [Socket.IO](https://socket.io/docs/ "Socket.IO")
-6. [npm](https://en.wikipedia.org/wiki/Npm_(software))
-7. [ESLint](https://eslint.org/docs/user-guide/getting-started "ESLint")
-
-#### Frontend
-1. [React](https://reactjs.org/docs/getting-started.html "React")
-2. [React Redux](https://redux.js.org/introduction/getting-started "React Redux")
-3. [React Semantic UI](https://react.semantic-ui.com/ "React Semantic UI")
-4. [Moment.js](https://momentjs.com/ "Moment.js")
-5. [validator.js](https://www.npmjs.com/package/validator "validator.js")
-6. [history](https://www.npmjs.com/package/history "history")
-
-#### Backend
-1. [Node.js](https://nodejs.org/en/ "Node.js")
-2. [Express](https://expressjs.com/ru/guide/routing.html "Express")
-3. [Passport.js](http://www.passportjs.org/docs/ "Passport.js")
-4. [Sequelize](http://docs.sequelizejs.com/ "Sequelize")
-5. [axios](https://www.npmjs.com/package/axios "axios")
-6. [bcrypt](https://www.npmjs.com/package/bcrypt "bcrypt")
-7. [Babel](https://babeljs.io/docs/en/index.html "Babel")
-8. [nodemon](https://www.npmjs.com/package/nodemon "nodemon")
-9. [dotenv](https://www.npmjs.com/package/dotenv "dotenv")
-10. [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken "jsonwebtoken")
-
-#### Database
-1. [PostgreSQL](https://www.postgresql.org/download/ "PostgreSQL")
 
 ## Установка
 
@@ -133,8 +102,6 @@
     
 ## Задания
 
-Необходимо добавить следующие возможности:
-
 1. Поставить dislike посту.
 2. Обновить свой пост.
 3. Удалить свой пост. Soft deletion - пост должен остаться в базе данных.
@@ -152,11 +119,6 @@
 15. Отправить пользователю email, если его посту поставили like.
 16. Поделиться постом по email.
 
-## PS
-Весь список тасков также можно найти на доске [**Trello**](https://trello.com/b/9Y9ZIr6j "**Trello**") в колонке Backlog Students. Доску нужно скопировать себе и по ней работать. Это поможет вам отслеживать весь процесс своей работы, а нам - определить, что уже готово. Таск будет считаться выполненным, если он полностью завершен и фича работает. Посмотрим на ее реализацию и оценим, правильно ли распределили логику в проекте. Это покажет, насколько вы разобрались в архитектуре. Также дадим комментарии по коду.
-
-Основной результат работы можно определить тем, как глубоко вы смогли разобраться в проекте и понять его, и как далеко продвинулись в личном обучении.
 
 Ссылки:
-1. [Репозиторий](https://github.com/BinaryStudioAcademy/thread-js).
-2. [Trello](https://trello.com/b/9Y9ZIr6j).
+1. [Исходный репозиторий](https://github.com/BinaryStudioAcademy/thread-js).
