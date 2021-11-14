@@ -2,12 +2,12 @@ import { Router } from 'express';
 const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
 
-import * as authService from '../services/auth.service';
-import * as userService from '../services/user.service';
-import authenticationMiddleware from '../middlewares/authentication.middleware';
-import registrationMiddleware from '../middlewares/registration.middleware';
-import jwtMiddleware from '../middlewares/jwt.middleware';
-import { SENDGRID_API_KEY } from '../../config/email.config';
+import * as authService from '../services/auth.service.js';
+import * as userService from '../services/user.service.js';
+import authenticationMiddleware from '../middlewares/authentication.middleware.js';
+import registrationMiddleware from '../middlewares/registration.middleware.js';
+import jwtMiddleware from '../middlewares/jwt.middleware.js';
+import { SENDGRID_API_KEY } from '../../config/email.config.js';
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 
-import { UserModel, ImageModel } from '../models/index';
-import BaseRepository from './base.repository';
+import { UserModel, ImageModel } from '../models/index.js';
+import BaseRepository from './base.repository.js';
 
 const Op = Sequelize.Op;
 

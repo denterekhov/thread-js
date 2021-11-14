@@ -1,5 +1,5 @@
-import orm from '../db/connection';
-import associate from '../db/associations';
+import orm from '../db/connection.js';
+import associate from '../db/associations.js';
 
 const User = orm.import('./user');
 const Post = orm.import('./post');

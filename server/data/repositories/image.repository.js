@@ -1,5 +1,5 @@
-import { ImageModel } from '../models/index';
-import BaseRepository from './base.repository';
+import { ImageModel } from '../models/index.js';
+import BaseRepository from './base.repository.js';
 
 class ImageRepository extends BaseRepository {}
 

@@ -1,5 +1,5 @@
-import { CommentModel, UserModel, ImageModel, CommentReactionModel } from '../models/index';
-import BaseRepository from './base.repository';
+import { CommentModel, UserModel, ImageModel, CommentReactionModel } from '../models/index.js';
+import BaseRepository from './base.repository.js';
 
 class CommentRepository extends BaseRepository {
     getCommentById(id) {

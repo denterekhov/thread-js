@@ -1,6 +1,6 @@
-import tokenHelper from '../../helpers/token.helper';
-import cryptoHelper from '../../helpers/crypto.helper';
-import userRepository from '../../data/repositories/user.repository';
+import tokenHelper from '../../helpers/token.helper.js';
+import cryptoHelper from '../../helpers/crypto.helper.js';
+import userRepository from '../../data/repositories/user.repository.js';
 
 export const login = async ({ id }) => ({
     token: tokenHelper.createToken({ id }),

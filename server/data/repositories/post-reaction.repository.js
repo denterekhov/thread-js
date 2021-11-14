@@ -1,5 +1,5 @@
-import { PostReactionModel, PostModel, UserModel } from '../models/index';
-import BaseRepository from './base.repository';
+import { PostReactionModel, PostModel, UserModel } from '../models/index.js';
+import BaseRepository from './base.repository.js';
 
 class PostReactionRepository extends BaseRepository {
     getPostReaction(userId, postId) {

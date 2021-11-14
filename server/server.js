@@ -6,14 +6,14 @@ import passport from 'passport';
 import http from 'http';
 import socketIO from 'socket.io';
 
-import routes from './api/routes/index';
-import authorizationMiddleware from './api/middlewares/authorization.middleware';
-import errorHandlerMiddleware from './api/middlewares/error-handler.middleware';
-import routesWhiteList from './config/routes-white-list.config';
-import socketInjector from './socket/injector';
-import socketHandlers from './socket/handlers';
+import routes from './api/routes/index.js';
+import authorizationMiddleware from './api/middlewares/authorization.middleware.js';
+import errorHandlerMiddleware from './api/middlewares/error-handler.middleware.js';
+import routesWhiteList from './config/routes-white-list.config.js';
+import socketInjector from './socket/injector.js';
+import socketHandlers from './socket/handlers.js';
 
-import './config/passport.config';
+import './config/passport.config.js';
 
 dotenv.config();
 

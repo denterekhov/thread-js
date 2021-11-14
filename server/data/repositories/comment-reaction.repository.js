@@ -1,6 +1,6 @@
-import { CommentModel, CommentReactionModel } from '../models/index';
+import { CommentModel, CommentReactionModel } from '../models/index.js';
 
-import BaseRepository from './base.repository';
+import BaseRepository from './base.repository.js';
 
 export const likeCommentCase = bool => `CASE WHEN "commentReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
 
