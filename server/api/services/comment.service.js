@@ -1,5 +1,5 @@
-import commentRepository from '../../data/repositories/comment.repository';
-import commentReactionRepository from '../../data/repositories/comment-reaction.repository';
+import commentRepository from '../../data/repositories/comment.repository.js';
+import commentReactionRepository from '../../data/repositories/comment-reaction.repository.js';
 
 export const updateCommentById = (id, comment) => commentRepository.updateById(id, comment);
 

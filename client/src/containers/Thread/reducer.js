@@ -9,7 +9,7 @@ import {
     SET_EXPANDED_POST,
     SET_EDITING_POST,
     SET_EDITING_COMMENT
-} from './actionTypes';
+} from './actionTypes.js';
 
 export default (state = {}, action) => {
     switch (action.type) {

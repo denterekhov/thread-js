@@ -1,9 +1,9 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { secret } from './jwt.config';
-import userRepository from '../data/repositories/user.repository';
-import cryptoHelper from '../helpers/crypto.helper';
+import { secret } from './jwt.config.js';
+import userRepository from '../data/repositories/user.repository.js';
+import cryptoHelper from '../helpers/crypto.helper.js';
 
 const options = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as postService from '../services/post.service';
-import { SENDGRID_API_KEY } from '../../config/email.config';
+import * as postService from '../services/post.service.js';
+import { SENDGRID_API_KEY } from '../../config/email.config.js';
 
 const router = Router();
 const sgMail = require('@sendgrid/mail');

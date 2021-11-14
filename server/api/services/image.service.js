@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { imgurId } from '../../config/imgur.config';
-import imageRepository from '../../data/repositories/image.repository';
+import { imgurId } from '../../config/imgur.config.js';
+import imageRepository from '../../data/repositories/image.repository.js';
 
 const uploadToImgur = async (file) => {
     try {

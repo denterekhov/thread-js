@@ -11,7 +11,7 @@ import {
     SET_EXPANDED_POST,
     SET_EDITING_POST,
     SET_EDITING_COMMENT
-} from './actionTypes';
+} from './actionTypes.js';
 
 const setPostsAction = posts => ({
     type: SET_ALL_POSTS,

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import { usersSeed, userImagesSeed } from '../seed-data/users.seed';
-import { postsSeed, postImagesSeed } from '../seed-data/posts.seed';
-import commentsSeed from '../seed-data/comments.seed';
-import postReactionsSeed from '../seed-data/post-reactions.seed';
-import commentReactionsSeed from '../seed-data/comment-reactions.seed';
+import { usersSeed, userImagesSeed } from '../seed-data/users.seed.js';
+import { postsSeed, postImagesSeed } from '../seed-data/posts.seed.js';
+import commentsSeed from '../seed-data/comments.seed.js';
+import postReactionsSeed from '../seed-data/post-reactions.seed.js';
+import commentReactionsSeed from '../seed-data/comment-reactions.seed.js';
 
 const randomIndex = length => Math.floor(Math.random() * length);
 const mapLinks = images => images.map(x => `'${x.link}'`).join(',');

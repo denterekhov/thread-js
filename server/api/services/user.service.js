@@ -1,5 +1,5 @@
-import cryptoHelper from '../../helpers/crypto.helper';
-import userRepository from '../../data/repositories/user.repository';
+import cryptoHelper from '../../helpers/crypto.helper.js';
+import userRepository from '../../data/repositories/user.repository.js';
 
 export const getUserById = async (userId) => {
     const { id, username, email, imageId, image, status } = await userRepository.getUserById(userId);
